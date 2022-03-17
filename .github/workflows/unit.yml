@@ -13,11 +13,11 @@ concurrency:
 
 
 jobs:
-  setup:
-    name: Restore Cache
+  phpunit:
     runs-on: ubuntu-latest
-    outputs:
-      cache: ${{ steps.cache.outputs.cache-hit }}
+    strategy:
+      matrix:
+        directory: [core, api]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,38 +28,19 @@ jobs:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
 
-  install:
-    name: Install Dependencies
-    runs-on: ubuntu-latest
-    # if: ${{ needs.setup.outputs.cache }} != 'true'
-    needs: setup
-    strategy:
-      matrix:
-        directory: [core, api]
-
-    steps:
-    - uses: actions/checkout@v2
     - name: Install ${{ matrix.directory }} dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
       uses: php-actions/composer@v6
       with:
         php_version: "7.4"
         working_dir: ./${{ matrix.directory }}
 
-  phpunit:
-    name: PHPUnit/${{ matrix.directory }}
-    runs-on: ubuntu-latest
-    # if: ${{ needs.setup.outputs.cache }} != 'true'
-    needs: install
-    strategy:
-      matrix:
-        directory: [core, api]
+    - name: PHPUnit/${{ matrix.directory }}
+      uses: php-actions/composer@v6
+        with:
+          php_version: "7.4"
+          working_dir: ./${{ matrix.directory }}
 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: php-actions/composer@v6
-      with:
-        php_version: "7.4"
-        working_dir: ./${{ matrix.directory }}
     - name: PHPUnit/${{ matrix.directory }}
       uses: php-actions/phpunit@v3
       with:
