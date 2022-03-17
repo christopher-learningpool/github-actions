@@ -33,12 +33,14 @@ jobs:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-    - name: Install ${{ matrix.directory }}
+    - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
         coverage: pcov
         tools: composer:v2
+
+    - name: Install dependencies for ${{ matrix.directory }}
       run: |
         cd ./${{ matrix.directory }}
         composer install
