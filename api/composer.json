@@ -1,0 +1,19 @@
+{
+    "name": "christophermclaughlin/github-actions",
+    "type": "project",
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "php": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "api\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Christopher McLaughlin",
+            "email": "christopher@learningpool.com"
+        }
+    ]
+}

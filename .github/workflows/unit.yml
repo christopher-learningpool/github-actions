@@ -1,0 +1,47 @@
+name: PHPUnit Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != refs/heads/master }}
+
+
+jobs:
+  setup:
+    name: Checkout & Restore Cache
+    runs-on: ubuntu-latest
+    outputs:
+      cache: ${{ steps.cache.outputs.cache-hit }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache Composer dependencies
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: /tmp/composer-cache
+        key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
+
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    # if: ${{ needs.setup.outputs.cache }} != 'true'
+    needs: setup
+    strategy:
+      matrix:
+        directory:
+        - core
+        - api
+
+    steps:
+    - name: Install ${{ matrix.directory }} dependencies
+      uses: php-actions/composer@v6
+      with:
+        php_version: "7.4"
+        working_dir: ./${{ matrix.directory }}
