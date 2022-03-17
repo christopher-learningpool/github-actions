@@ -21,21 +21,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
     - name: Cache Composer dependencies
       uses: actions/cache@v2
       id: cache
       with:
-        path: /tmp/composer-cache
-        key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-    - name: Install ${{ matrix.directory }} dependencies
-      uses: php-actions/composer@v6
+    - name: Install & Run tests ${{ matrix.directory }}
+      uses: shivammathur/setup-php@v2
+      working-directory: ./${{ matrix.directory }}
       with:
-        php_version: "7.4"
-        working_dir: ./${{ matrix.directory }}
-
-    - name: PHPUnit/${{ matrix.directory }}
-      uses: php-actions/phpunit@v3
-      with:
-        php_version: "7.4"
-        configuration: ./${{ matrix.directory }}/phpunit.xml
+        php-version: '7.4'
+        tools: composer:v2, phpunit
