@@ -33,11 +33,20 @@ jobs:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-    - name: Install & Run tests ${{ matrix.directory }}
+    - name: Install ${{ matrix.directory }}
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
-        tools: composer:v2, phpunit
+        coverage: pcov
+        tools: composer:v2
     - run: |
         cd ./${{ matrix.directory }}
         composer install
+
+    - name: Run PHPUnit tests
+      run: vendor/bin/phpunit --coverage-clover=coverage.xml
+
+    - name: Send code coverage report to Codecov.io
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
