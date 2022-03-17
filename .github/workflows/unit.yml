@@ -35,9 +35,7 @@ jobs:
     needs: setup
     strategy:
       matrix:
-        directory:
-        - core
-        - api
+        directory: [core, api]
 
     steps:
     - name: Install ${{ matrix.directory }} dependencies
