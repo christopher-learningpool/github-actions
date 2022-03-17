@@ -35,11 +35,11 @@ jobs:
         php_version: "7.4"
         working_dir: ./${{ matrix.directory }}
 
-    - name: PHPUnit/${{ matrix.directory }}
-      uses: php-actions/composer@v6
-      with:
-        php_version: "7.4"
-        working_dir: ./${{ matrix.directory }}
+    # - name: PHPUnit/${{ matrix.directory }}
+    #   uses: php-actions/composer@v6
+    #   with:
+    #     php_version: "7.4"
+    #     working_dir: ./${{ matrix.directory }}
 
     - name: PHPUnit/${{ matrix.directory }}
       uses: php-actions/phpunit@v3
