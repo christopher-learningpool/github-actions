@@ -49,7 +49,7 @@ jobs:
     name: PHPUnit/${{ matrix.directory }}
     runs-on: ubuntu-latest
     # if: ${{ needs.setup.outputs.cache }} != 'true'
-    needs: setup
+    needs: install
     strategy:
       matrix:
         directory: [core, api]
