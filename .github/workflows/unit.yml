@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   setup:
-    name: Checkout & Restore Cache
+    name: Restore Cache
     runs-on: ubuntu-latest
     outputs:
       cache: ${{ steps.cache.outputs.cache-hit }}
@@ -44,3 +44,24 @@ jobs:
       with:
         php_version: "7.4"
         working_dir: ./${{ matrix.directory }}
+
+  phpunit:
+    name: PHPUnit/${{ matrix.directory }}
+    runs-on: ubuntu-latest
+    # if: ${{ needs.setup.outputs.cache }} != 'true'
+    needs: setup
+    strategy:
+      matrix:
+        directory: [core, api]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: php-actions/composer@v6
+      with:
+        php_version: "7.4"
+        working_dir: ./${{ matrix.directory }}
+    - name: PHPUnit/${{ matrix.directory }}
+      uses: php-actions/phpunit@v3
+      with:
+        php_version: "7.4"
+        configuration: ./${{ matrix.directory }}/phpunit.xml
