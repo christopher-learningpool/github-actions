@@ -39,12 +39,14 @@ jobs:
         php-version: '7.4'
         coverage: pcov
         tools: composer:v2
-    - run: |
+      run: |
         cd ./${{ matrix.directory }}
         composer install
 
     - name: Run PHPUnit tests
-      run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      run: |
+        cd ./${{ matrix.directory }}
+        vendor/bin/phpunit --coverage-clover=coverage.xml
 
     - name: Send code coverage report to Codecov.io
       uses: codecov/codecov-action@v2
