@@ -29,17 +29,10 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
 
     - name: Install ${{ matrix.directory }} dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
       uses: php-actions/composer@v6
       with:
         php_version: "7.4"
         working_dir: ./${{ matrix.directory }}
-
-    # - name: PHPUnit/${{ matrix.directory }}
-    #   uses: php-actions/composer@v6
-    #   with:
-    #     php_version: "7.4"
-    #     working_dir: ./${{ matrix.directory }}
 
     - name: PHPUnit/${{ matrix.directory }}
       uses: php-actions/phpunit@v3
