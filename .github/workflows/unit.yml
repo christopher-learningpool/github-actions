@@ -40,13 +40,13 @@ jobs:
         # coverage: pcov
         tools: composer:v2
 
-    - name: Install dependencies (No Cache) for ${{ matrix.directory }}
-      working-directory: ./${{ matrix.directory }}
-      run: composer install --no-cache
-
     - name: Install dependencies (Cached) for ${{ matrix.directory }}
       working-directory: ./${{ matrix.directory }}
       run: composer install
+
+    - name: Install dependencies (No Cache) for ${{ matrix.directory }}
+      working-directory: ./${{ matrix.directory }}
+      run: composer install --no-cache
 
     - name: Run PHPUnit tests
       working-directory: ./${{ matrix.directory }}
