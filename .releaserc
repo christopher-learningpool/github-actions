@@ -2,5 +2,17 @@
   "branches": [
       {name: 'main'},
       {name: 'beta', channel: 'beta', prerelease: true}
+    ],
+  "plugins": [
+     "@semantic-release/release-notes-generator",
+    ["@semantic-release/changelog",
+        {
+            "changelogFile": "CHANGELOG.md",
+            "changelogTitle": "# Semantic Versioning Changelog"
+        }
+    ],
+    ["@semantic-release/npm",
+        { "npmPublish": false}
     ]
+  ]
 }
