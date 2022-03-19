@@ -1,14 +1,17 @@
 {
   "branches": [
-      {name: 'main'},
-      {name: 'beta', channel: 'beta', prerelease: true}
+        {name: 'main'},
+        {name: 'beta', channel: 'beta', prerelease: true}
     ],
   "plugins": [
-     "@semantic-release/release-notes-generator",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    "@semantic-release/git",
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/exec",
     ["@semantic-release/changelog",
         {
-            "changelogFile": "CHANGELOG.md",
-            "changelogTitle": "# Semantic Versioning Changelog"
+            "changelogFile": "CHANGELOG.md"
         }
     ],
     ["@semantic-release/npm",
