@@ -10,7 +10,7 @@
       {
         "assets": ["CHANGELOG.md"]
       }
-    ]
+    ],
     "@semantic-release/commit-analyzer",
     "@semantic-release/exec",
     ["@semantic-release/changelog",
