@@ -19,7 +19,9 @@ class Average {
      */
     public function median(array $numbers) {
         sort($numbers);
+
         $size = count($numbers);
+
         if ($size % 2) {
             return $numbers[$size / 2];
         } else {
