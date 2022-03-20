@@ -8,7 +8,7 @@ on:
         type: string
       testsuites:
         required: true
-        gtype: string
+        type: string
 
 jobs:
   phpunit:
@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        testsuite: ${{ inputs.testsuites }}
+        testsuite: ${{ inputs.testsuites }}g
 
     steps:
       - uses: actions/checkout@v2
