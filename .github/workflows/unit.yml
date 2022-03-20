@@ -13,13 +13,13 @@ concurrency:
 
 
 jobs:
-  phpunit:
+  matrix:
     name: PHPUnit (${{ matrix.directory }})
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        directory: [core, api]
+    outputs:
+      apiSuite: ${{ steps.execAPI.outputs.matrix }}
+      coreSuite: ${{ steps.execCORE.outputs.matrix }}
 
     steps:
       - uses: actions/checkout@v2
@@ -41,17 +41,32 @@ jobs:
         with:
           php-version: '7.4'
           tools: composer:v1
-
-      - name: Install dependencies for ${{ inputs.directory }}
-        working-directory: ./${{ inputs.directory }}
+    # API Suites
+      - working-directory: ./api
         run: composer install
 
-      - name: List of Testsuites
-        id: exec
-        working-directory: ./${{ matrix.directory }}
+      - working-directory: ./api
+        id: execAPI
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
+    # CORE Suites
+      - working-directory: ./core
+        run: composer install
+
+      - working-directory: ./core
+        id: execCORE
         run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
+  phpunit:
+    name: PHPUnit (${{ matrix.directory }})
+    runs-on: ubuntu-latest
+    needs: matrix
+
+    strategy:
+      matrix:
+        directory: [core, api]
+
+    steps:
       - uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
         with:
           directory: ${{ matrix.directory }}
-          testsuites: ${{ steps.exec.outputs.matrix }}
+          testsuites: ${{ needs.matrix.outputs.${{ matrix.directory }}suite }}

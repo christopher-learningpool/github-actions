@@ -4,17 +4,14 @@ on:
       directory:
         required: true
         type: string
-      testsuites:
+      testsuite:
         required: true
+        type: string
 
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-    name: PHPUnit (${{ inputs.directory }}) Testsuite (${{ matrix.testsuite }})
-
-    strategy:
-      matrix:
-        testsuite: ${{ inputs.testsuites }}
+    name: PHPUnit (${{ inputs.directory }}) Testsuite (${{ inputs.testsuite  }})
 
     steps:
       - uses: actions/checkout@v2
@@ -43,4 +40,4 @@ jobs:
 
       - name: Run PHPUnit testsuite
         working-directory: ./${{ inputs.directory }}
-        run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }}
+        run: vendor/bin/phpunit --testsuite ${{ inputs.testsuite  }}
