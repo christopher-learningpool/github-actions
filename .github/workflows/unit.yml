@@ -24,7 +24,7 @@ jobs:
       - name: List of Testsuites
         id: core-testsuites
         working-directory: ./core
-        run: echo "vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]'"
+        run: echo "::set-output name=dir::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
   matrix_api:
     name: Generate PHPUnit (api) testing matrix
@@ -37,7 +37,7 @@ jobs:
       - name: List of Testsuites
         id: api-testsuites
         working-directory: ./api
-        run: echo "vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]'"
+        run: echo "::set-output name=dir::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
   phpunit_core:
     name: PHPUnit Core Testsuites
