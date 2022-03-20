@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        testsuite: ${{ parseJSON(${{ inputs.testsuites }}) }}
+        testsuite: ${{ toJSON(${{ inputs.testsuites }}) }}
 
     steps:
       - uses: actions/checkout@v2
