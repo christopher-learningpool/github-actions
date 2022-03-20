@@ -56,17 +56,20 @@ jobs:
         id: execCORE
         run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
-  phpunit:
-    name: PHPUnit (${{ matrix.directory }})
-    runs-on: ubuntu-latest
+  phpunitCore:
+    name: PHPUnit (Core)
     needs: matrix
 
-    strategy:
-      matrix:
-        directory: [core, api]
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    with:
+      directory: Core
+      testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
-    steps:
-      - uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
-        with:
-          directory: ${{ matrix.directory }}
-          testsuites: ${{ needs.matrix.outputs.coreSuite }}
+  phpunitAPI:
+    name: PHPUnit (API)
+    needs: matrix
+
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    with:
+      directory: ${{ matrix.directory }}
+      testsuites: ${{ needs.matrix.outputs.apiSuite }}
