@@ -13,8 +13,8 @@ concurrency:
 
 
 jobs:
-  testsuite_core:
-    name: Run converter
+  matrix_core:
+    name: Generate PHPUnit (core) testing matrix
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{steps.core-testsuites.outputs.matrix}}
@@ -26,8 +26,8 @@ jobs:
         working-directory: ./core
         run: echo "vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]'"
 
-  testsuite_api:
-    name: Run converter
+  matrix_api:
+    name: Generate PHPUnit (api) testing matrix
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{steps.api-testsuites.outputs.matrix}}
@@ -42,10 +42,10 @@ jobs:
   phpunit_core:
     name: PHPUnit Core Testsuites
     runs-on: ubuntu-latest
-    needs: testsuite_core
+    needs: matrix_core
     strategy:
       matrix:
-        testsuite: ${{ needs.job1.outputs.core-testsuite }}
+        testsuite: ${{ needs.matrix_core.outputs.matrix }}
 
     steps:
       - uses: ./.github/workflows/workflow_unit.yml
@@ -56,10 +56,10 @@ jobs:
   phpunit_api:
     name: PHPUnit Core Testsuites
     runs-on: ubuntu-latest
-    needs: testsuite_api
+    needs: matrix_api
     strategy:
       matrix:
-        testsuite: ${{ needs.job1.outputs.api-testsuite }}
+        testsuite: ${{ needs.matrix_api.outputs.matrix }}
 
     steps:
       - uses: ./.github/workflows/workflow_unit.yml
