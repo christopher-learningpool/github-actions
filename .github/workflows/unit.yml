@@ -26,6 +26,7 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
+        working-directory: ./api
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
@@ -47,14 +48,14 @@ jobs:
 
       - working-directory: ./api
         id: execAPI
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]' | jq tojson)"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
     # CORE Suites
       - working-directory: ./core
         run: composer install
 
       - working-directory: ./core
         id: execCORE
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]' | jq tojson)"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
   phpunitCore:
     name: PHPUnit (Core)
@@ -63,7 +64,7 @@ jobs:
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: core
-      testsuites: ${{ needs.matrix.outputs.coreSuite }}
+      testsuites: ${{ toJSON(needs.matrix.outputs.coreSuite) }}
 
   phpunitAPI:
     name: PHPUnit (API)
@@ -72,4 +73,4 @@ jobs:
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: api
-      testsuites: ${{ needs.matrix.outputs.apiSuite }}
+      testsuites: ${{ toJSON(needs.matrix.outputs.apiSuite) }}
