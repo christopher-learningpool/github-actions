@@ -11,6 +11,7 @@ jobs:
   phpunit:
     needs: matrix
     runs-on: ubuntu-latest
+    name: PHPUnit (${{ inputs.directory }}) Testsuite (${{ matrix.testsuite }})
     strategy:
       matrix:
         testsuite: ${{ inputs.testsuites }}
