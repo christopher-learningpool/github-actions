@@ -43,8 +43,9 @@ jobs:
     name: PHPUnit Core Testsuites
     runs-on: ubuntu-latest
     needs: testsuite_core
-    matrix:
-      testsuite: ${{ needs.job1.outputs.core-testsuite }}
+    strategy:
+      matrix:
+        testsuite: ${{ needs.job1.outputs.core-testsuite }}
 
     steps:
       - uses: ./.github/workflows/workflow_unit.yml
@@ -56,8 +57,9 @@ jobs:
     name: PHPUnit Core Testsuites
     runs-on: ubuntu-latest
     needs: testsuite_api
-    matrix:
-      testsuite: ${{ needs.job1.outputs.core-testsuite }}
+    strategy:
+      matrix:
+        testsuite: ${{ needs.job1.outputs.api-testsuite }}
 
     steps:
       - uses: ./.github/workflows/workflow_unit.yml
