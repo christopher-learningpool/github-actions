@@ -69,4 +69,4 @@ jobs:
       - uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
         with:
           directory: ${{ matrix.directory }}
-          testsuites: ${{ needs.matrix.outputs.${{ matrix.directory }}suite }}
+          testsuites: ${{ needs.matrix.outputs.coreSuite }}
