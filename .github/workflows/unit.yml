@@ -48,14 +48,14 @@ jobs:
 
       - working-directory: ./api
         id: execAPI
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]') | jq tostring"
     # CORE Suites
       - working-directory: ./core
         run: composer install
 
       - working-directory: ./core
         id: execCORE
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]') | jq tostring"
 
   phpunitCore:
     name: PHPUnit (Core)
@@ -64,7 +64,7 @@ jobs:
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: core
-      testsuites: ${{ toJSON(needs.matrix.outputs.coreSuite) }}
+      testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
   phpunitAPI:
     name: PHPUnit (API)
@@ -73,4 +73,4 @@ jobs:
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: api
-      testsuites: ${{ toJSON(needs.matrix.outputs.apiSuite) }}
+      testsuites: ${{ needs.matrix.outputs.apiSuite }}
