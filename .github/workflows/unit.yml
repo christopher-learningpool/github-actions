@@ -41,7 +41,7 @@ jobs:
         working-directory: ./${{ matrix.directory }}
         run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
 
-      - uses: ./.github/workflows/workflow_unit.yml
+      - uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
         with:
           directory: ${{ matrix.directory }}
           testsuites: ${{ steps.exec.outputs.matrix }}
