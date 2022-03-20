@@ -8,27 +8,6 @@ on:
         required: true
 
 jobs:
-  # matrix:
-  #   name: Generate PHPUnit (${{ inputs.directory }}) testing matrix
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     suites: ${{ steps.exec.outputs.matrix }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-
-  #   - name: Cache Composer dependencies
-  #     uses: actions/cache@v2
-  #     id: cache
-  #     with:
-  #       path: ${{ steps.composer-cache.outputs.dir }}
-  #       # Bit of a hardcode.
-  #       key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
-
-  #     - name: List of Testsuites
-  #       id: exec
-  #       working-directory: ./${{ inputs.directory }}
-  #       run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's|[- ,]||g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
-
   phpunit:
     needs: matrix
     runs-on: ubuntu-latest
