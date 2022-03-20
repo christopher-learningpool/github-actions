@@ -48,14 +48,14 @@ jobs:
 
       - working-directory: ./api
         id: execAPI
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]')"
     # CORE Suites
       - working-directory: ./core
         run: composer install
 
       - working-directory: ./core
         id: execCORE
-        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -Rsc 'split("\n")' | jq '[ .[] | select(length > 0) ]')"
+        run: echo "::set-output name=matrix::$(vendor/bin/phpunit --list-suites | sed -ne '/Available test suite(s):/,$p' | sed '1d' | sed 's/ - //g' | jq -R -s -c 'split("\n")[:-1]')"
 
   phpunitCore:
     name: PHPUnit (Core)
