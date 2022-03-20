@@ -13,7 +13,7 @@ on:
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-    name: PHPUnit (${{ inputs.directory }})
+    name: Testsuite (${{ matrix.testsuite }})
 
     strategy:
       matrix:
