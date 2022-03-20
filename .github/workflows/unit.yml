@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   matrix:
-    name: Build Matrix
+    name: Test Matrix
     runs-on: ubuntu-latest
 
     outputs:
@@ -26,6 +26,7 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
+        # Needs a working directory to reach a composer.json
         working-directory: ./api
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 

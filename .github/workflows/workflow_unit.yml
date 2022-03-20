@@ -24,6 +24,7 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
+        working-directory: ./${{ inputs.directory }}
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
@@ -46,4 +47,5 @@ jobs:
 
       - name: Run PHPUnit testsuite
         working-directory: ./${{ inputs.directory }}
+        # Composer can't accept a testsuite with spaces in the name.
         run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }}
