@@ -62,7 +62,7 @@ jobs:
 
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
-      directory: Core
+      directory: core
       testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
   phpunitAPI:
@@ -71,5 +71,5 @@ jobs:
 
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
-      directory: ${{ matrix.directory }}
+      directory: api
       testsuites: ${{ needs.matrix.outputs.apiSuite }}
