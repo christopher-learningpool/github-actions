@@ -9,6 +9,10 @@ on:
       testsuites:
         required: true
         type: string
+      coverage:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   phpunit:
@@ -36,9 +40,19 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
 
       - name: Setup PHP
+        if: ${{ inputs.coverage == false }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
+          coverage: none
+          tools: composer:v1
+
+      - name: Setup PHP with coverage
+        if: ${{ inputs.coverage == true }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: pcov
           tools: composer:v1
 
       - name: Install dependencies for ${{ inputs.directory }}
@@ -46,6 +60,13 @@ jobs:
         run: composer install
 
       - name: Run PHPUnit testsuite
+        if: ${{ inputs.coverage == false }}
         working-directory: ./${{ inputs.directory }}
         # Composer can't accept a testsuite with spaces in the name.
         run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }}
+
+      - name: Run PHPUnit testsuite with coverage
+        if: ${{ inputs.coverage == true }}
+        working-directory: ./${{ inputs.directory }}
+        # Composer can't accept a testsuite with spaces in the name.
+        run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }} --coverage-text
