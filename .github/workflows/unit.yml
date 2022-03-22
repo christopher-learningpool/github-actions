@@ -75,7 +75,7 @@ jobs:
     steps:
       - run: |
           echo "Slug variables"
-          echo " - ${{ env.GITHUB_REF_SLUG }}"
+          echo " - ${{ github.head_ref }}"
           echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
           echo " - ${{ env.GITHUB_BASE_REF_SLUG }}"
           echo " - ${{ env.GITHUB_REPOSITORY_SLUG }}"
