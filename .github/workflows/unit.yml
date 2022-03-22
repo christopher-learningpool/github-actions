@@ -73,12 +73,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - run: echo ${{ needs.matrix.outputs.coreSuite }}
-      # - run: echo ${{ needs.matrix.outputs.apiSuite }}
-      # - run: echo ${{ fromJSON(needs.matrix.outputs.coreSuite) }}
-      # - run: echo ${{ fromJSON(needs.matrix.outputs.apiSuite) }}
-      # - run: echo ${{ process.env.GITHUB_REF_NAME }}
-      run: |
+      - run: |
         echo "Slug variables"
         echo " - ${{ env.GITHUB_REF_SLUG }}"
         echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
