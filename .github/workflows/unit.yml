@@ -77,7 +77,7 @@ jobs:
       - run: echo ${{ needs.matrix.outputs.apiSuite }}
       - run: echo ${{ fromJSON(needs.matrix.outputs.coreSuite) }}
       - run: echo ${{ fromJSON(needs.matrix.outputs.apiSuite) }}
-
+      - run: echo ${{ env.GITHUB_REF_NAME }}
 
   phpunitCore:
     name: PHPUnit (Core)
