@@ -68,26 +68,26 @@ jobs:
   #         sed '1d' | sed 's/ - //g' |
   #         jq -R -s -c 'split("\n")[:-1]')"
 
-  debug:
-    # needs: matrix
-    runs-on: ubuntu-latest
+  # debug:
+  #   # needs: matrix
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - run: |
-          echo "Slug variables"
-          echo " - ${{ github.head_ref }}"
-          echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
-          echo " - ${{ env.GITHUB_BASE_REF_SLUG }}"
-          echo " - ${{ env.GITHUB_REPOSITORY_SLUG }}"
-          # output e.g. : master feat-new-feature v1.0.0 product-1.0.0-rc.2 new-awesome-product
-          echo "Slug URL variables"
-          echo " - ${{ env.GITHUB_REF_SLUG_URL }}"
-          echo " - ${{ env.GITHUB_HEAD_REF_SLUG_URL }}"
-          echo " - ${{ env.GITHUB_BASE_REF_SLUG_URL }}"
-          echo " - ${{ env.GITHUB_REPOSITORY_SLUG_URL }}"
-          # output e.g. : master feat-new-feature v1-0-0 product-1-0-0-rc-2 new-awesome-product
-          echo "Short SHA variables"
-          echo " - ${{ env.GITHUB_SHA_SHORT }}"
+  #   steps:
+  #     - run: |
+  #         echo "Slug variables"
+  #         echo " - ${{ env.GITHUB_REF_SLUG }}"
+  #         echo " - ${{ env.GITHUB_HEAD_REF_SLUG }}"
+  #         echo " - ${{ env.GITHUB_BASE_REF_SLUG }}"
+  #         echo " - ${{ env.GITHUB_REPOSITORY_SLUG }}"
+  #         # output e.g. : master feat-new-feature v1.0.0 product-1.0.0-rc.2 new-awesome-product
+  #         echo "Slug URL variables"
+  #         echo " - ${{ env.GITHUB_REF_SLUG_URL }}"
+  #         echo " - ${{ env.GITHUB_HEAD_REF_SLUG_URL }}"
+  #         echo " - ${{ env.GITHUB_BASE_REF_SLUG_URL }}"
+  #         echo " - ${{ env.GITHUB_REPOSITORY_SLUG_URL }}"
+  #         # output e.g. : master feat-new-feature v1-0-0 product-1-0-0-rc-2 new-awesome-product
+  #         echo "Short SHA variables"
+  #         echo " - ${{ env.GITHUB_SHA_SHORT }}"
 
   # phpunitCore:
   #   name: PHPUnit (Core)
@@ -98,11 +98,11 @@ jobs:
   #     directory: core
   #     testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
-  # phpunitAPI:
-  #   name: PHPUnit (API)
-  #   needs: matrix
+  phpunitAPI:
+    name: PHPUnit (API)
+    # needs: matrix
 
-  #   uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
-  #   with:
-  #     directory: api
-  #     testsuites: ${{ needs.matrix.outputs.apiSuite }}
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    with:
+      directory: api
+      testsuites: '["api-testsuite-1","api-testsuite-2"]'
