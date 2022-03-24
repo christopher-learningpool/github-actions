@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 env:
-  TESTSUITE_API: '["api-testsuite-1","api-testsuite-2"]'
+  TESTSUITE_API: ["api-testsuite-1","api-testsuite-2"]
 
 jobs:
   # matrix:
