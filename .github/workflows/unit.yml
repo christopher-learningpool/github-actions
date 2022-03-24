@@ -111,7 +111,7 @@ jobs:
 
     steps:
       - id: apisuite
-        run: echo "::set-output name=matrix::${{ env.TESTSUITE_API }}"
+        run: echo "::set-output name=matrix::\"${{ env.TESTSUITE_API }}\""
       # - id: coresuite
       #   run: echo "::set-output name=matrix::'${{ env.TESTSUITE_CORE }}'"
       # - id: phpversion
