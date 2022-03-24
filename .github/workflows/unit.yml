@@ -11,6 +11,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
+env:
+  TESTSUITE_API: '["api-testsuite-1","api-testsuite-2"]'
 
 jobs:
   # matrix:
@@ -98,11 +100,28 @@ jobs:
   #     directory: core
   #     testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
+  build-env:
+    runs-on: ubuntu-latest
+    name: Build Environment Variables.
+
+    outputs:
+      apiSuite: ${{ steps.apisuite.outputs.matrix }}
+      coreSuite: ${{ steps.coresuite.outputs.matrix }}
+      phpVersion: ${{ steps.phpversion.outputs.matrix }}
+
+    steps:
+      - id: apisuite
+        run: echo "::set-output name=matrix::$('${{ env.TESTSUITE_API }}')"
+      - id: coresuite
+        run: echo "::set-output name=matrix::$('${{ env.TESTSUITE_CORE }}')"
+      - id: phpversion
+        run: echo "::set-output name=matrix::$('${{ env.PHP_VERSION }}')"
+
   phpunitAPI:
     name: PHPUnit (API)
-    # needs: matrix
+    needs: build-env
 
     uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: api
-      testsuites: '["api-testsuite-1","api-testsuite-2"]'
+      testsuites: ${{ needs.build-env.outputs.apiSuite }}
