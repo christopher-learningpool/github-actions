@@ -100,41 +100,11 @@ jobs:
   #     directory: core
   #     testsuites: ${{ needs.matrix.outputs.coreSuite }}
 
-  build-env:
-    runs-on: ubuntu-latest
-    name: Build Environment Variables.
-
-    outputs:
-      apiSuite: ${{ steps.apisuite.outputs.matrix }}
-      coreSuite: ${{ steps.coresuite.outputs.matrix }}
-      phpVersion: ${{ steps.phpversion.outputs.matrix }}
-
-    steps:
-      - id: apisuite
-        run: echo "::set-output name=matrix::${{ toJSON(${{ env.TESTSUITE_API }}) }}"
-      # - id: coresuite
-      #   run: echo "::set-output name=matrix::'${{ env.TESTSUITE_CORE }}'"
-      # - id: phpversion
-      #   run: echo "::set-output name=matrix::'${{ env.PHP_VERSION }}'"
-
-  echo-env:
-    runs-on: ubuntu-latest
-    needs: build-env
-    name: Build Environment Variables.
-
-    steps:
-      - id: apisuite
-        run: echo ${{ needs.build-env.outputs.apiSuite }}
-      # - id: coresuite
-      #   run: echo "::set-output name=matrix::'${{ env.TESTSUITE_CORE }}'"
-      # - id: phpversion
-      #   run: echo "::set-output name=matrix::'${{ env.PHP_VERSION }}'"
-
   phpunitAPI:
     name: PHPUnit (API)
     needs: build-env
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml
     with:
       directory: api
-      testsuites: ${{ needs.build-env.outputs.apiSuite }}
+      testsuites: '["api-testsuite-1","api-testsuite-2"]'
