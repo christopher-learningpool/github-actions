@@ -91,7 +91,6 @@ jobs:
           tools: composer:v1
 
       - name: Install Coverage merger
-        working-directory: ./coveragetmp
         run: composer require --dev nimut/phpunit-merger
 
       - name: Install Coverage merger
