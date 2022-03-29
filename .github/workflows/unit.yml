@@ -87,8 +87,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-          coverage: pcov
+          coverage: none
           tools: composer:v1
 
-      - name: Run Coverage merge
-        run: phpcov merge --clover /coveragetmp/clover.xml /coveragetmp
+      - name: Install Coverage merger
+        run: composer require --dev nimut/phpunit-merger
+
+      - name: Install Coverage merger
+        run: vendor/bin/phpunit-merger log ./coveragetmp ./coveragetmp/clover.xml
