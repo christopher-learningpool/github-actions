@@ -82,3 +82,13 @@ jobs:
         with:
           name: api-coverage
           path: ./coveragetmp
+
+      - name: PHP coverage
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: pcov
+          tools: composer:v1
+
+      - name: Run Coverage merge
+        run: phpcov merge --clover /coveragetmp/clover.xml /coveragetmp
