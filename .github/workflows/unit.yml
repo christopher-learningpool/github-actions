@@ -95,3 +95,9 @@ jobs:
 
       - name: Install Coverage merger
         run: vendor/bin/phpunit-merger log ./coveragetmp ./coveragetmp/clover.xml
+
+      - name: Monitor coverage
+        uses: slavcodev/coverage-monitor-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          coverage_path: "./coveragetmp/clover.xml"
