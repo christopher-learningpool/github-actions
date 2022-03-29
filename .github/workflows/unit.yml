@@ -35,11 +35,6 @@ jobs:
           coverage: none
           tools: composer:v1
 
-      - name: Define Composer config
-        if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: ./core
-        run: composer config http-basic.www.setasign.com ${{ secrets.SETASIGN_USERNAME }} ${{ secrets.SETASIGN_PASSWORD }}
-
       - name: Install dependencies (core)
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: ./core
