@@ -64,7 +64,7 @@ jobs:
     name: PHPUnit (API)
     needs: build-cache
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
     with:
       directory: api
       testsuites: '["api-testsuite-1","api-testsuite-2"]'
