@@ -1,60 +1,102 @@
 name: PHPUnit Tests
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   push:
-    branches:
-      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
-
 jobs:
-  phpunit:
+  build-cache:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        directory: [core, api]
+    name: Build Cache
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Get composer cache directory
-      id: composer-cache
-      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Get composer cache directory
+        id: composer-cache
+        working-directory: ./core
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-    - name: Cache Composer dependencies
-      uses: actions/cache@v2
-      id: cache
-      with:
-        path: ${{ steps.composer-cache.outputs.dir }}
-        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ hashFiles('./api/composer.lock') }}-${{ hashFiles('./core/composer.lock') }}
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        # coverage: pcov
-        tools: composer:v2
+      - name: Setup PHP
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: composer:v1
 
-    - name: Install dependencies (Cached) for ${{ matrix.directory }}
-      working-directory: ./${{ matrix.directory }}
-      run: composer install
+      - name: Install dependencies (core)
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ./core
+        run: composer install
 
-    - name: Install dependencies (No Cache) for ${{ matrix.directory }}
-      working-directory: ./${{ matrix.directory }}
-      run: composer install --no-cache
+      - name: Install dependencies (api)
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ./api
+        run: composer install
 
-    - name: Run PHPUnit tests
-      working-directory: ./${{ matrix.directory }}
-      run: vendor/bin/phpunit
+  phpunitCore:
+    name: PHPUnit (Core)
+    needs: build-cache
 
-    # vendor/bin/phpunit --coverage-clover=${{ matrix.directory }}-coverage.xml
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    with:
+      directory: core
+      testsuites: '["Project-Test-Suite"]'
+      coverage: true
 
-    # - name: Send code coverage report to Codecov.io
-    #   uses: codecov/codecov-action@v2
-    #   with:
-    #     token: ${{ secrets.CODECOV_TOKEN }}
+  phpunitAPI:
+    name: PHPUnit (API)
+    needs: build-cache
+
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    with:
+      directory: api
+      testsuites: '["api-testsuite-1","api-testsuite-2"]'
+      coverage: true
+
+  coverage-artifact:
+    name: Download coverage artifacts
+    needs: [phpunitCore, phpunitAPI]
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: mkdir coveragetmp
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: core-coverage
+          path: ./coveragetmp
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: api-coverage
+          path: ./coveragetmp
+
+      - name: PHP coverage
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: composer:v1
+
+      - name: Install Coverage merger
+        run: composer require --dev nimut/phpunit-merger
+
+      - name: Install Coverage merger
+        run: vendor/bin/phpunit-merger log ./coveragetmp ./coveragetmp/clover.xml
+
+      - name: Coverage Report as Comment (Clover)
+        uses: lucassabreu/comment-coverage-clover@main
+        with:
+          file: ./coveragetmp/clover.xml
