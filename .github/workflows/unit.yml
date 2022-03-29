@@ -94,7 +94,7 @@ jobs:
         run: composer require --dev nimut/phpunit-merger
 
       - name: Install Coverage merger
-        run: vendor/bin/phpunit-merger log ./coveragetmp ./coveragetmp/clover.xml
+        run: vendor/bin/phpunit-merger coverage ./coveragetmp ./coveragetmp/clover.xml
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v3
