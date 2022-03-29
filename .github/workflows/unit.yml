@@ -79,13 +79,11 @@ jobs:
       - run: mkdir coveragetmp
 
       - uses: actions/download-artifact@v3
-        working-directory: ./coveragetmp
         with:
           name: core-coverage
-          path: ./core-coverage.xml
+          path: ./coveragetmp
 
       - uses: actions/download-artifact@v3
-        working-directory: ./coveragetmp
         with:
           name: api-coverage
-          path: ./api-coverage.xml
+          path: ./coveragetmp
