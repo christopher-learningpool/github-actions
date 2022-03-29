@@ -49,7 +49,7 @@ jobs:
     name: PHPUnit (Core)
     needs: build-cache
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@coverage-reporting
     with:
       directory: core
       testsuites: '["Project-Test-Suite"]'
@@ -59,7 +59,7 @@ jobs:
     name: PHPUnit (API)
     needs: build-cache
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@github-actions-unit
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@coverage-reporting
     with:
       directory: api
       testsuites: '["api-testsuite-1","api-testsuite-2"]'
