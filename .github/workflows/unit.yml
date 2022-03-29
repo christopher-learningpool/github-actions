@@ -74,24 +74,27 @@ jobs:
     name: Setup coverage artifacts
     needs: [phpunitCore, phpunitAPI]
 
-  - run: mkdir coveragetmp
+    steps:
+      - run: mkdir coveragetmp
 
   coverage-artifact-core:
     name: Download coverage artifacts
     needs: [phpunitCore, phpunitAPI, coverageDirectory]
-    working-directory: ./coveragetmp
 
-  - uses: actions/download-artifact@v3
-    with:
-      name: core-coverage
-      path: ./core-coverage.xml
+    steps:
+      - uses: actions/download-artifact@v3
+        working-directory: ./coveragetmp
+        with:
+          name: core-coverage
+          path: ./core-coverage.xml
 
   coverage-artifact-api:
     name: Download coverage artifacts
     needs: [phpunitCore, phpunitAPI, coverageDirectory]
-    working-directory: ./coveragetmp
 
-  - uses: actions/download-artifact@v3
-    with:
-      name: api-coverage
-      path: ./api-coverage.xml
+    steps:
+      - uses: actions/download-artifact@v3
+        working-directory: ./coveragetmp
+        with:
+          name: api-coverage
+          path: ./api-coverage.xml
