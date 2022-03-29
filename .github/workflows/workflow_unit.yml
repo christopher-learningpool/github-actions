@@ -69,4 +69,12 @@ jobs:
         if: ${{ inputs.coverage == true }}
         working-directory: ./${{ inputs.directory }}
         # Composer can't accept a testsuite with spaces in the name.
-        run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }} --coverage-text
+        run: vendor/bin/phpunit --testsuite ${{ matrix.testsuite }} --coverage-clover ./${{ inputs.directory }}-coverage.xml
+
+      - name: Upload coverage artifact
+        if: ${{ inputs.coverage == true }}
+        working-directory: ./${{ inputs.directory }}
+        uses: actions/upload-artifact@v3
+          with:
+            name: ${{ inputs.directory }}-coverage
+            path: ./${{ inputs.directory }}-coverage.xml
