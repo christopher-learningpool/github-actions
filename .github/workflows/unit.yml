@@ -70,29 +70,20 @@ jobs:
       testsuites: '["api-testsuite-1","api-testsuite-2"]'
       coverage: true
 
-  coverageDirectory:
-    name: Setup coverage artifacts
+  coverage-artifact:
+    name: Download coverage artifacts
     needs: [phpunitCore, phpunitAPI]
+    runs-on: ubuntu-latest
 
     steps:
       - run: mkdir coveragetmp
 
-  coverage-artifact-core:
-    name: Download coverage artifacts
-    needs: [phpunitCore, phpunitAPI, coverageDirectory]
-
-    steps:
       - uses: actions/download-artifact@v3
         working-directory: ./coveragetmp
         with:
           name: core-coverage
           path: ./core-coverage.xml
 
-  coverage-artifact-api:
-    name: Download coverage artifacts
-    needs: [phpunitCore, phpunitAPI, coverageDirectory]
-
-    steps:
       - uses: actions/download-artifact@v3
         working-directory: ./coveragetmp
         with:
