@@ -73,8 +73,7 @@ jobs:
 
       - name: Upload coverage artifact
         if: ${{ inputs.coverage == true }}
-        working-directory: ./${{ inputs.directory }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.directory }}-coverage
-          path: ./${{ inputs.directory }}-coverage.xml
+          path: ./${{ inputs.directory }}/${{ inputs.directory }}-coverage.xml
