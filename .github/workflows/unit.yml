@@ -96,7 +96,14 @@ jobs:
       - name: Install Coverage merger
         run: vendor/bin/phpunit-merger log ./coveragetmp ./coveragetmp/clover.xml
 
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: merged-coverage
+          path: ./coveragetmp/clover.xml
+
       - name: Coverage Report as Comment (Clover)
         uses: lucassabreu/comment-coverage-clover@main
         with:
           file: ./coveragetmp/clover.xml
+          base-file: ./coveragetmp/clover.xml
