@@ -5,7 +5,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build-cache:
@@ -65,7 +65,7 @@ jobs:
       testsuites: '["api-testsuite-1","api-testsuite-2"]'
       coverage: true
 
-  coverage-artifact:
+  coverage-report:
     name: Coverage Reporting
     needs: [phpunitCore, phpunitAPI]
     runs-on: ubuntu-latest
@@ -76,16 +76,18 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: core-coverage
+          name: coverage-report
           path: ./coveragetmp
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: api-coverage
-          path: ./coveragetmp
+      - name: Install PHIVE
+        uses: szepeviktor/phive@v1.0.0
 
-      - name: Coverage Report as Comment (Clover)
-        uses: lucassabreu/comment-coverage-clover@main
+      - run: phive install phpcov
+      - run: phpcov merge --clover ./clover.xml ./coveragetmp/
+
+      - name: Upload full coverage artifact
+        if: ${{ inputs.coverage == true }}
+        uses: actions/upload-artifact@v3
         with:
-          file: ./coveragetmp/api-coverage.xml
-          base-file: ./coveragetmp/api-coverage.xml
+          name: coverage-report
+          path: ./clover.xml
