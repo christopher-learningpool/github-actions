@@ -75,12 +75,12 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: core-coverage
+          name: core-coverage.xml
           path: ./coveragetmp
 
       - uses: actions/download-artifact@v3
         with:
-          name: api-coverage
+          name: api-coverage.xml
           path: ./coveragetmp
 
       - name: PHP coverage
