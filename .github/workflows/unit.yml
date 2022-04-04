@@ -93,5 +93,5 @@ jobs:
       - name: Upload full coverage artifact
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-report
+          name: merged-coverage-report
           path: ./report
