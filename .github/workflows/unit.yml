@@ -88,10 +88,10 @@ jobs:
       - working-directory: ./coveragetmp
         run: composer require --dev phpunit/phpcov
 
-      - run: ./coveragetmp/vendor/bin/phpcov merge --html ./ ./coveragetmp/
+      - run: ./coveragetmp/vendor/bin/phpcov merge --html ./report ./coveragetmp/
 
       - name: Upload full coverage artifact
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./clover.xml
+          path: ./report
