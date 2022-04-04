@@ -85,6 +85,11 @@ jobs:
           php-version: '7.4'
           tools: composer:v1
 
+      - name: Get composer cache directory
+        id: composer-cache
+        working-directory: ./core
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         id: cache
