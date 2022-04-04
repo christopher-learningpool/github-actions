@@ -86,7 +86,6 @@ jobs:
       - run: phpcov merge --clover ./clover.xml ./coveragetmp/
 
       - name: Upload full coverage artifact
-        if: ${{ inputs.coverage == true }}
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
