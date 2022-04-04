@@ -98,7 +98,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('./coveragetmp/composer.lock') }} }}
 
       - working-directory: ./coveragetmp
-        run: composer require --dev phpunit/phpcov
+        run: composer require --dev phpunit/phpcov:7.0.2
 
       - working-directory: ./coveragetmp
         run: ./vendor/bin/phpcov merge --html ./report ./
