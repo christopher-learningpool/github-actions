@@ -75,45 +75,16 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: core-coverage.xml
+          name: core-coverage
           path: ./coveragetmp
 
       - uses: actions/download-artifact@v3
         with:
-          name: api-coverage.xml
+          name: api-coverage
           path: ./coveragetmp
 
-      - name: PHP coverage
-        uses: shivammathur/setup-php@v2
+      - name: Coverage Report as Comment (Clover)
+        uses: lucassabreu/comment-coverage-clover@main
         with:
-          php-version: '7.4'
-          coverage: pcov
-          tools: composer:v1
-
-      - name: Core/Coverage Report
-        uses: lucassabreu/comment-coverage-clover@v0.3.0
-        with:
-          file: core-coverage.xml
-
-      - name: Api/Coverage Report
-        uses: lucassabreu/comment-coverage-clover@v0.3.0
-        with:
-          file: api-coverage.xml
-
-      # - name: Install Coverage merger
-      #   run: composer require --dev nimut/phpunit-merger
-
-      # - name: Install Coverage merger
-      #   run: vendor/bin/phpunit-merger coverage ./coveragetmp ./coveragetmp/clover.xml
-
-      # - name: Upload coverage artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: merged-coverage
-      #     path: ./coveragetmp/clover.xml
-
-      # - name: Coverage Report as Comment (Clover)
-      #   uses: lucassabreu/comment-coverage-clover@main
-      #   with:
-      #     file: ./coveragetmp/clover.xml
-      #     base-file: ./coveragetmp/clover.xml
+          file: ./coveragetmp/api-coverage.xml
+          base-file: ./coveragetmp/api-coverage.xml
