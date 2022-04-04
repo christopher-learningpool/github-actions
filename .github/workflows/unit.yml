@@ -82,7 +82,7 @@ jobs:
       - name: Install PHIVE
         uses: szepeviktor/phive@v1.0.0
         with:
-          signingKey: '0x6AF725270AB81E04D79442549D8A98B29B2D5D79'
+          signingKey: '0x9D8A98B29B2D5D79'
 
       - run: phive install phpcov
       - run: phpcov merge --clover ./clover.xml ./coveragetmp/
