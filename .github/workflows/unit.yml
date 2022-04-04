@@ -90,20 +90,30 @@ jobs:
           coverage: pcov
           tools: composer:v1
 
-      - name: Install Coverage merger
-        run: composer require --dev nimut/phpunit-merger
-
-      - name: Install Coverage merger
-        run: vendor/bin/phpunit-merger coverage ./coveragetmp ./coveragetmp/clover.xml
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v3
+      - name: Core/Coverage Report
+        uses: lucassabreu/comment-coverage-clover@v0.3.0
         with:
-          name: merged-coverage
-          path: ./coveragetmp/clover.xml
+          file: core-coverage.xml
 
-      - name: Coverage Report as Comment (Clover)
-        uses: lucassabreu/comment-coverage-clover@main
+      - name: Api/Coverage Report
+        uses: lucassabreu/comment-coverage-clover@v0.3.0
         with:
-          file: ./coveragetmp/clover.xml
-          base-file: ./coveragetmp/clover.xml
+          file: api-coverage.xml
+
+      # - name: Install Coverage merger
+      #   run: composer require --dev nimut/phpunit-merger
+
+      # - name: Install Coverage merger
+      #   run: vendor/bin/phpunit-merger coverage ./coveragetmp ./coveragetmp/clover.xml
+
+      # - name: Upload coverage artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: merged-coverage
+      #     path: ./coveragetmp/clover.xml
+
+      # - name: Coverage Report as Comment (Clover)
+      #   uses: lucassabreu/comment-coverage-clover@main
+      #   with:
+      #     file: ./coveragetmp/clover.xml
+      #     base-file: ./coveragetmp/clover.xml
