@@ -85,13 +85,21 @@ jobs:
           php-version: '7.4'
           tools: composer:v1
 
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ hashFiles('./coveragetmp/composer.lock') }} }}
+
       - working-directory: ./coveragetmp
         run: composer require --dev phpunit/phpcov
 
-      - run: ./coveragetmp/vendor/bin/phpcov merge --html ./report ./coveragetmp/
+      - working-directory: ./coveragetmp
+        run: ./vendor/bin/phpcov merge --html ./report ./
 
       - name: Upload full coverage artifact
         uses: actions/upload-artifact@v3
         with:
           name: merged-coverage-report
-          path: ./report
+          path: ./coveragetmp/report
