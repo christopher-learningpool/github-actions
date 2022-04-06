@@ -112,6 +112,9 @@ jobs:
       # - run: echo ${{ steps.slack-report.outputs.summary }}
       # - run: echo ${{ steps.slack-report.outputs.summary[0] }}
       # - run: echo ${{ steps.slack-report.outputs.summary }}[0]
-      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}
-      - run: echo ${{toJSON(steps.slack-report.outputs.summary)[0]}}
-      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
+      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}
+      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)[0]}}
+      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
+      - run: echo ${{fromJSON(steps.slack-report.outputs.summary)}}
+      - run: echo ${{fromJSON(steps.slack-report.outputs.summary)[0]}}
+      - run: echo ${{fromJSON(steps.slack-report.outputs.summary)}}[0]
