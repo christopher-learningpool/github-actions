@@ -110,4 +110,4 @@ jobs:
               sed 's/:(/: (/g' |  jq -R -sc 'split("\n")[:-1]')"
 
       - run: echo '${{fromJSON(steps.slack-report.outputs.summary)[0]}}'
-      - run: echo '${{ github.run_id }}'
+      - run: echo '${{ github }}'
