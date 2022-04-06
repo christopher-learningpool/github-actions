@@ -110,7 +110,8 @@ jobs:
               sed 's/:(/: (/g' |  jq -R -s 'split("\n")[:-1]')"
 
       - run: echo ${{ steps.slack-report.outputs.summary }}
-      # - run: echo ${{ steps.slack-report.outputs.summary }}[0]
       - run: echo ${{ steps.slack-report.outputs.summary[0] }}
-
-      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
+      - run: echo ${{ steps.slack-report.outputs.summary }}[0]
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)[0]}}
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
