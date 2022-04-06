@@ -109,4 +109,4 @@ jobs:
               sed -n 5,7p | sed 's/ //g' |
               sed 's/:(/: (/g' |  jq -R -s -c 'split("\n")[:-1]')"
 
-      - run: echo toJSON(${{ steps.slack-report.outputs.summary[0] }})[0]
+      - run: echo ${{ toJSON(${{ steps.slack-report.outputs.summary[0] }})[0] }}
