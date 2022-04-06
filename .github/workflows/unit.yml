@@ -107,14 +107,14 @@ jobs:
           echo "::set-output name=summary::$(./vendor/bin/phpcov merge --text -- ./ |
               sed -ne '/Code Coverage Report:/,$p' |
               sed -n 5,7p | sed 's/ //g' |
-              sed 's/:(/: (/g' |  jq -R -s 'split("\n")[:-1]' | jq tostring)"
+              sed 's/:(/: (/g' |  jq -R -s 'split("\n")[:-1]')"
 
-      # - run: echo ${{ steps.slack-report.outputs.summary }}
-      # - run: echo ${{ steps.slack-report.outputs.summary[0] }}
-      # - run: echo ${{ steps.slack-report.outputs.summary }}[0]
-      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}
-      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)[0]}}
-      # - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
+      - run: echo ${{ steps.slack-report.outputs.summary }}
+      - run: echo ${{ steps.slack-report.outputs.summary[0] }}
+      - run: echo ${{ steps.slack-report.outputs.summary }}[0]
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)[0]}}
+      - run: echo ${{toJSON(steps.slack-report.outputs.summary)}}[0]
       - run: echo ${{fromJSON(steps.slack-report.outputs.summary)}}
       - run: echo ${{fromJSON(steps.slack-report.outputs.summary)[0]}}
       - run: echo ${{fromJSON(steps.slack-report.outputs.summary)}}[0]
