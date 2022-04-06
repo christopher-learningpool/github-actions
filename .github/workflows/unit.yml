@@ -100,5 +100,13 @@ jobs:
       - working-directory: ./coveragetmp
         run: composer require --dev phpunit/phpcov:7.0.2
 
-      - working-directory: ./coveragetmp
-        run: ./vendor/bin/phpcov merge --text ./
+      - name: Generate Slack Report
+        working-directory: ./tmp/coverage
+        id: slack-report
+        run: |
+          echo "::set-output name=summary::$(./vendor/bin/phpcov merge --text -- ./ |
+              sed -ne '/Code Coverage Report:/,$p' |
+              sed -n 5,7p | sed 's/ //g' |
+              sed 's/:(/: (/g' |  jq -R -s -c 'split("\n")[:-1]')"
+
+      - echo: toJSON(${{ steps.slack-report.outputs.summary[0] }})[0]
