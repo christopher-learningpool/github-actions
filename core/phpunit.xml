@@ -19,7 +19,9 @@
     <filter>
         <whitelist>
             <directory suffix=".php">src/</directory>
-            <directory suffix=".php">./../shared/</directory>
+        </whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>./../shared</directory>
         </whitelist>
     </filter>
 
