@@ -1,8 +1,6 @@
 <?php
 
-namespace core;
-
-use shared\Average as SharedAverage;
+namespace shared;
 
 class Average {
     /**
@@ -25,9 +23,7 @@ class Average {
         if ($size % 2) {
             return $numbers[$size / 2];
         } else {
-            $test = new SharedAverage();
-
-            return $test->mean(
+            return $this->mean(
                 array_slice($numbers, ($size / 2) - 1, 2)
             );
         }
