@@ -100,7 +100,7 @@ jobs:
       - working-directory: ./coveragetmp
         run: composer require --dev phpunit/phpcov:7.0.2
 
-      - run: ./tmp/coverage/vendor/bin/phpcov merge --html ./coveragetmp/report ./coveragetmp
+      - run: ./coveragetmp/vendor/bin/phpcov merge --html ./coveragetmp/report ./coveragetmp
 
       - name: Upload full coverage artifact
         uses: actions/upload-artifact@v3
