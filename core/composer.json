@@ -6,6 +6,9 @@
         "php": "^7.4"
     },
     "autoload": {
+        "classmap": [
+            "../shared"
+        ],
         "psr-4": {
             "core\\": "src/"
         }

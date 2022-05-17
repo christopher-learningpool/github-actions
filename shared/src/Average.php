@@ -2,7 +2,7 @@
 
 namespace shared;
 
-class Average {
+class SharedAverage {
     /**
      * Calculate the mean average
      * @param array $numbers Array of numbers

@@ -2,7 +2,7 @@
 
 namespace core;
 
-use shared\Average as SharedAverage;
+use shared\SharedAverage;
 
 class Average {
     /**
@@ -11,7 +11,9 @@ class Average {
      * @return float Mean average
      */
     public function mean(array $numbers) {
-        return array_sum($numbers) / count($numbers);
+        $sharedaverage = new SharedAverage();
+
+        return $sharedaverage->mean($numbers);
     }
 
     /**
@@ -20,16 +22,8 @@ class Average {
      * @return float Median average
      */
     public function median(array $numbers) {
-        sort($numbers);
-        $size = count($numbers);
-        if ($size % 2) {
-            return $numbers[$size / 2];
-        } else {
-            $test = new SharedAverage();
+        $sharedaverage = new SharedAverage();
 
-            return $test->mean(
-                array_slice($numbers, ($size / 2) - 1, 2)
-            );
-        }
+        return $sharedaverage->median($numbers);
     }
 }
