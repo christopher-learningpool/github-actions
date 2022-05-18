@@ -5,7 +5,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build-cache:
@@ -49,7 +49,7 @@ jobs:
     name: PHPUnit (Core)
     needs: build-cache
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@coverage-reporting
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@unit-coverage-report
     with:
       directory: core
       testsuites: '["Project-Test-Suite"]'
@@ -59,32 +59,64 @@ jobs:
     name: PHPUnit (API)
     needs: build-cache
 
-    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@coverage-reporting
+    uses: christopher-learningpool/github-actions/.github/workflows/workflow_unit.yml@unit-coverage-report
     with:
       directory: api
       testsuites: '["api-testsuite-1","api-testsuite-2"]'
       coverage: true
 
-  coverage-artifact:
+  coverage-report:
     name: Coverage Reporting
     needs: [phpunitCore, phpunitAPI]
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - run: mkdir coveragetmp
 
       - uses: actions/download-artifact@v3
         with:
-          name: core-coverage
+          name: coverage-report
           path: ./coveragetmp
 
-      - uses: actions/download-artifact@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          name: api-coverage
-          path: ./coveragetmp
+          php-version: '7.4'
+          tools: composer:v1
 
-      - name: Coverage Report as Comment (Clover)
-        uses: lucassabreu/comment-coverage-clover@main
+      - name: Get composer cache directory
+        id: composer-cache
+        working-directory: ./core
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        id: cache
         with:
-          file: ./coveragetmp/api-coverage.xml
-          base-file: ./coveragetmp/api-coverage.xml
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ hashFiles('./coveragetmp/composer.lock') }} }}
+
+      - working-directory: ./coveragetmp
+        run: composer require --dev phpunit/phpcov:7.0.2
+
+      - run: ./coveragetmp/vendor/bin/phpcov merge --html ./coveragetmp/report ./coveragetmp
+
+      - name: Upload full coverage artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Core-API-HTML-Coverage-Report
+          path: ./coveragetmp/report
+          retention-days: 2
+
+      # - name: Generate Slack Report
+      #   working-directory: ./coveragetmp
+      #   id: slack-report
+      #   run: |
+      #     echo "::set-output name=summary::$(./vendor/bin/phpcov merge --text -- ./ |
+      #         sed -ne '/Code Coverage Report:/,$p' |
+      #         sed -n 5,7p | sed 's/ //g' |
+      #         sed 's/:(/: (/g' |  jq -R -sc 'split("\n")[:-1]')"
+
+      # - run: echo '${{fromJSON(steps.slack-report.outputs.summary)[0]}}'
+      # - run: echo '${{ github }}'

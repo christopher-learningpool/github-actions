@@ -1,0 +1,15 @@
+{
+    "name": "christophermclaughlin/github-actions",
+    "authors": [
+        {
+            "name": "Christopher McLaughlin",
+            "email": "christopher@learningpool.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "shared\\Average": "shared/src"
+        }
+    }
+}

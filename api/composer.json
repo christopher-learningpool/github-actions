@@ -2,7 +2,7 @@
     "name": "christophermclaughlin/github-actions",
     "type": "project",
     "require": {
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^8.0",
         "php": "^7.4"
     },
     "autoload": {
